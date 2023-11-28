@@ -67,7 +67,7 @@ llm = ChatOpenAI(
     model_name="gpt-3.5-turbo",
     temperature=0.1,
     max_tokens=1000,
-    openai_api_key="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"
+    openai_api_key=st.secrets["openai_key"]
 )
 
 prefix = few_shot_settings.get_prefix()
