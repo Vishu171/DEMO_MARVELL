@@ -91,7 +91,7 @@ def fs_chain(question):
   embeddings = fewShot.get_embeddings()
   example_selector = fewShot.get_example_selector(embeddings)
   prompt_template = fewShot.get_prompt(question, example_selector, example_prompt)
-  docsearch = FAISS.load_local("/content/drive/MyDrive/streamlit-buffett-main/faiss_index", embeddings)
+  docsearch = FAISS.load_local("faiss_index", embeddings)
   qa_chain = RetrievalQA.from_chain_type(llm, retriever=docsearch.as_retriever(), chain_type_kwargs={"prompt": prompt_template})
   return qa_chain({"query": question})
 
@@ -163,8 +163,8 @@ def authenticate_user():
 
 if authenticate_user():
     with st.sidebar:
-      image = Image.open("/content/drive/MyDrive/streamlit-buffett-main/assets/FinGPT.png")
-      image = st.image('/content/drive/MyDrive/streamlit-buffett-main/assets/FinGPT.png',width=280)
+      image = Image.open("assets/jadenew.png")
+      image = st.image('assets/jadenew.png',width=280)
       
     str_input = st.chat_input("Enter your question:")
     st.markdown("""
