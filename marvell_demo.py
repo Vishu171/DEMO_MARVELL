@@ -113,19 +113,7 @@ except:
 # adding this to test out caching
 st.cache_data(ttl=86400)
 
-def plot_financials(df_2, x, y, x_cutoff, title):
-    """"
-    helper to plot the altair financial charts
-    
-    return st.altair_chart(alt.Chart(df_2.head(x_cutoff)).mark_bar().encode(
-        x=x,
-        y=y
-        ).properties(title=title)
-    ) 
-    """
-    #df_subset = df_2.head(x_cutoff)
-    df = pd.DataFrame(df_2)
-    return st.bar_chart(data=df,x=df.columns[0], y=df.columns[1:], color=None,width=0, height=300, use_container_width=True)
+
 
 # adding this to test out caching
 st.cache_data(ttl=86400)
@@ -193,21 +181,9 @@ if authenticate_user():
                 continue
             csv = StringIO(df_str)
             df_data = pd.read_csv(csv, sep=',')
-            col1, col2 = st.columns(2)
             df_data.columns = df_data.columns.str.replace('_', ' ')
             headers = df_data.columns
-            
-            with col1:
-                st.markdown(tabulate(df_data, tablefmt="html",headers=headers,showindex=False), unsafe_allow_html = True) 
-                if len(df_data.index) >2 & len(df_data.columns) == 2:
-                    title_name = df_data.columns[0]+'-'+df_data.columns[1]
-                    with col2:
-                            grph_ser_val_x1  = df_data.iloc[:,0]
-                            grph_ser_val_y1  = df_data.iloc[:,1].apply(lambda x : float(str(x).replace(',','')))
-                            frame = {df_data.columns[0] : grph_ser_val_x1,
-                                     df_data.columns[1] : grph_ser_val_y1}
-                            df_final1 = pd.DataFrame(frame)
-                            plot_financials(df_final1,df_data.columns[0],df_data.columns[1], cutoff,title_name)
+            st.markdown(tabulate(df_data, tablefmt="html",headers=headers,showindex=False), unsafe_allow_html = True)
     
     if prompt := str_input:
         st.chat_message("user").markdown(prompt, unsafe_allow_html = True)
@@ -230,20 +206,9 @@ if authenticate_user():
                             new_name = f"{name} ($ thousands)"
                             df_2.rename(columns={name : new_name}, inplace=True)
                     
-                    col1, col2 = st.columns(2)
                     df_2.columns = df_2.columns.str.replace('_', ' ')
                     headers = df_2.columns
-                    with col1:
-                     st.markdown(tabulate(df_2, tablefmt="html",headers=headers,showindex=False), unsafe_allow_html = True) 
-                    if len(df_2.index) >2 & len(df_2.columns) == 2:
-                        title_name = df_2.columns[0]+'-'+df_2.columns[1]
-                        with col2:
-                            grph_ser_val_x  = df_2.iloc[:,0]
-                            grph_ser_val_y  = df_2.iloc[:,1].apply(lambda x : float(str(x).replace(',','')))
-                            frame = {df_2.columns[0] : grph_ser_val_x,
-                                     df_2.columns[1] : grph_ser_val_y}
-                            df_final = pd.DataFrame(frame)
-                            plot_financials(df_final,df_2.columns[0],df_2.columns[1], cutoff,title_name)
+                    st.markdown(tabulate(df_2, tablefmt="html",headers=headers,showindex=False), unsafe_allow_html = True) 
                   st.session_state.messages.append({"role": "assistant", "content": df_2.to_csv(sep=',', index=False)})
                     
                 else:
